@@ -16,7 +16,7 @@ order by location,date
 
 
 -- Looking countries with Highest Infection Rate compared to Population
-select location, population,max(total_cases) as HighestInfectionCount, max(total_cases/population)*100 as PercentPopulationInfected
+select location, population,max(total_cases) as HighestInfectionCount, max((total_cases/population))*100 as PercentPopulationInfected
 from PortfolioProject1..covid_deaths
 where continent is not null
 group by location,population
@@ -70,4 +70,16 @@ order by location,date
 select*,(RollingPeopleVaccinated/Population)*100 as RollingPeoplePercentage
 from PercentPopulationVaccinated
 
+-- We take these out as they are not in the above queries and want to stay consistent
+-- European Union is part of Europe
+select continent,max(cast(total_deaths as int)) as TotalDeathCount
+from PortfolioProject1..covid_deaths
+where continent is not null and location not in ('World','European Union', 'International')
+group by continent
+order by TotalDeathCount desc
 
+select location, population,date,max(total_cases) as HighestInfectionCount, max((total_cases/population))*100 as PercentPopulationInfected
+from PortfolioProject1..covid_deaths
+where continent is not null
+group by location,population,date
+order by PercentPopulationInfected desc
